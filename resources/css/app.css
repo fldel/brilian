@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Cave Story';
+  src: url('/fonts/CaveStory.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.pixel-button {
+  font-family: "Cave Story", monospace;
+  padding: 6px 32px; /* lebih kecil dari sebelumnya */
+  font-size: 24px;
+  border: 2px solid var(--btn-border); /* stroke pixel */
+  cursor: pointer;
+  border-radius: 6px;
+  background: var(--btn-main);
+  position: relative;
+  box-shadow: 0 6px 0 -2px var(--btn-shadow), 0 6px 0 var(--btn-border); 
+  transition: all 0.15s ease-in-out;
+}
+
+.pixel-button:hover {
+  background: var(--btn-hover, var(--btn-main));
+}
+
+.pixel-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 -2px var(--btn-shadow), 0 2px 0 1px var(--btn-border);
+}

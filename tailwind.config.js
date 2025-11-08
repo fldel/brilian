@@ -12,7 +12,15 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Mulish', 'ui-sans-serif', 'system-ui'],
+                cave: ['Cave Story', 'sans-serif'],            
+            },
+            colors: {
+                brand: {
+                    default: '#4075CF',
+                    light: '#96A0FF',
+                    dark: '#004AAD',
+                },
             },
         },
     },
