@@ -148,4 +148,13 @@ class ScholarshipController extends Controller
             return back()->withErrors(['error' => 'Failed to delete scholarship: ' . $e->getMessage()]);
         }
     }
+
+    /**
+     * Display the scholarship dashboard.
+     */
+    public function dashboard()
+    {
+        $scholarships = Scholarship::inRandomOrder()->take(15)->get();
+        return view('dashboard', compact('scholarships'));
+    }
 }

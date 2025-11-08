@@ -18,19 +18,34 @@
             border-radius: 16px;
         }
 
-        @keyframes scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        @keyframes scrollInfinite {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
-        .animate-scroll {
-        display: flex;
-        animation: scroll 25s linear infinite;
-        width: max-content;
+        .scroll-wrapper {
+            display: flex;
+            width: max-content;
+            animation: scrollInfinite 40s linear infinite;
         }
 
-        .animate-scroll-slow {
-        animation: scroll 50s linear infinite !important;
+        /* Hover effect: melambat */
+            .scroll-container:hover .scroll-wrapper {
+            animation-play-state: paused;
+        }
+
+        /* Smooth hover transition */
+        .scholarship-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .scholarship-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         </style>

@@ -63,4 +63,83 @@
         <!-- Section berikutnya (biar bisa scroll) -->
 
     </div>
+
+    <!-- Scholarships Section -->
+    <div class="relative w-full bg-white py-10 overflow-hidden">
+        <h2 class="text-5xl font-cave text-center mb-10">Recommended For You</h2>
+        
+        <div class="scroll-container relative overflow-hidden">
+            <div class="scroll-wrapper flex gap-6">
+                @foreach($scholarships as $scholarship)
+                    <div class="scholarship-card relative flex-shrink-0 w-[450px] h-[300px] 
+                    rounded-2xl overflow-hidden border-4 border-white/40 
+                    transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+                    <!-- Gambar Beasiswa -->
+                    <img src="{{ asset('storage/' . $scholarship->image) }}" 
+                        alt="{{ $scholarship->name }}" 
+                        class="w-full h-full object-cover rounded-2xl">
+
+                    <!-- Overlay gradient ke atas -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+                    <!-- Teks nama scholarship di tengah bawah -->
+                    <div class="absolute bottom-0 left-0 w-full flex justify-center items-end pb-6">
+                        <p class="text-white text-2xl font-bold text-center drop-shadow-lg">
+                            {{ $scholarship->name }}
+                        </p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    
+    <!-- All Scholarships Section -->
+    <div class="relative w-full bg-gray-50 py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-cave text-center mb-14 text-gray-900">All Scholarships</h2>
+
+            <!-- Grid container -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                @foreach($scholarships as $scholarship)
+                    <div class="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-200 overflow-hidden transition-transform duration-300 hover:scale-105">
+                        
+                        <!-- Gambar -->
+                        <img src="{{ asset('storage/' . $scholarship->image) }}" 
+                            alt="{{ $scholarship->name }}" 
+                            class="w-full h-48 object-cover">
+
+                        <!-- Konten -->
+                        <div class="p-5 flex flex-col justify-between h-[250px]">
+                            <!-- Nama -->
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight line-clamp-2">
+                                {{ $scholarship->name }}
+                            </h3>
+
+                            <!-- Deskripsi -->
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                                {{ Str::limit($scholarship->description, 150, '...') }}
+                            </p>
+
+                            <!-- Kategori -->
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                @if($scholarship->category)
+                                    @foreach(explode(',', $scholarship->category) as $cat)
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+                                            {{ trim($cat) }}
+                                        </span>
+                                    @endforeach
+                                @else
+                                    <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-sm">Uncategorized</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    @include('layouts.footer')
 </x-app-layout>

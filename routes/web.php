@@ -4,6 +4,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Scholarship;
 use App\Models\User;
+use App\Http\Controllers\Admin\ScholarshipController;
+use App\Http\Controllers\Admin\TipController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,12 +17,14 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = Auth::user();
 
-    // Periksa role pengguna dan arahkan ke dashboard yang sesuai
     if ($user->role === 'admin') {
-        return redirect('/admin/dashboard'); // Admin diarahkan ke dashboard admin
+        return redirect('/admin/dashboard');
     }
 
-    return view('dashboard'); // User biasa diarahkan ke dashboard user
+    // Ambil data beasiswa untuk user biasa
+    $scholarships = Scholarship::inRandomOrder()->take(15)->get();
+
+    return view('dashboard', compact('scholarships'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/about', fn() => view('about'))->name('about');
@@ -30,17 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use App\Http\Controllers\Admin\ScholarshipController;
-use App\Http\Controllers\Admin\TipController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Middleware\AdminMiddleware;
-
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', function () {
-        $scholarshipCount = Scholarship::count(); // Hitung jumlah beasiswa
-        $userCount = User::count(); // Hitung jumlah pengguna
-        $latestScholarships = Scholarship::latest()->take(5)->get(); // Ambil 5 beasiswa terbaru
+        $scholarshipCount = Scholarship::count();
+        $userCount = User::count();
+        $latestScholarships = Scholarship::latest()->take(5)->get();
 
         return view('admin.dashboard', compact('scholarshipCount', 'userCount', 'latestScholarships'));
     })->name('admin.dashboard');
@@ -49,10 +50,8 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         Route::resource('scholarships', ScholarshipController::class);
         Route::resource('tips', TipController::class);
         Route::resource('users', UserController::class);
-
-        // Tambahkan route untuk settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
