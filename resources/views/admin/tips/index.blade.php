@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 @forelse($tips as $tip)
-                    <tr class="border-b">
+                    <tr class="border-b hover:bg-gray-50">
                         <td class="px-6 py-3">{{ $tip->title }}</td>
                         <td class="px-6 py-3">{{ Str::limit($tip->content, 50) }}</td>
                         <td class="px-6 py-3">{{ $tip->user->name }}</td>
@@ -44,7 +44,8 @@
                         </td>
                         <td class="px-6 py-3">
                             <a href="{{ route('admin.tips.edit', $tip->id) }}" class="text-blue-600 hover:underline">Edit</a>
-                            <form action="{{ route('admin.tips.destroy', $tip->id) }}" method="POST" class="inline-block">
+                            <form action="{{ route('admin.tips.destroy', $tip->id) }}" method="POST" class="inline-block ml-3"
+                                  onsubmit="return confirm('Are you sure you want to delete this tip?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:underline">Delete</button>

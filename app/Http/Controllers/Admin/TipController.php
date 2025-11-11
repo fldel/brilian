@@ -26,7 +26,7 @@ class TipController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'link' => 'nullable|url|max:255', // ✅ Validasi tambahan
+            'link' => 'nullable|url|max:255', // Validasi tambahan
         ]);
 
         $imagePath = null;
@@ -39,10 +39,42 @@ class TipController extends Controller
             'content' => $validated['content'],
             'user_id' => Auth::id(),
             'image' => $imagePath,
-            'link' => $validated['link'] ?? null, // ✅ Simpan link
+            'link' => $validated['link'] ?? null, // Simpan link
         ]);
 
         return redirect()->route('admin.tips.index')->with('success', 'Tip created successfully!');
+    }
+
+    public function edit($id)
+    {
+        $tip = Tip::findOrFail($id);
+        return view('admin.tips.edit', compact('tip'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $tip = Tip::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'link' => 'nullable|url|max:255',
+        ]);
+
+        $imagePath = $tip->image;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('tips', 'public');
+        }
+
+        $tip->update([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'image' => $imagePath,
+            'link' => $validated['link'] ?? null,
+        ]);
+
+        return redirect()->route('admin.tips.index')->with('success', 'Tip updated successfully!');
     }
 
     public function destroy($id)

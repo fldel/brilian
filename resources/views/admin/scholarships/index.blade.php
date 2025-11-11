@@ -50,8 +50,17 @@
                             @endif
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <button class="text-blue-600 hover:underline">Edit</button>
-                            <button class="text-red-600 hover:underline ml-3">Delete</button>
+                            <a href="{{ route('admin.scholarships.edit', $scholarship->id) }}" 
+                               class="text-blue-600 hover:underline">Edit</a>
+
+                            <form action="{{ route('admin.scholarships.destroy', $scholarship->id) }}" 
+                                  method="POST" 
+                                  class="inline-block ml-3"
+                                  onsubmit="return confirm('Are you sure you want to delete this scholarship?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
