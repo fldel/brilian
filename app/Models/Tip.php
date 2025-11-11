@@ -13,6 +13,8 @@ class Tip extends Model
         'title',
         'content',
         'user_id',
+        'image',
+        'link',
     ];
 
     public function user()

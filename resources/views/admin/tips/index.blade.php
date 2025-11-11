@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Tips List</h1>
         <a href="{{ route('admin.tips.create') }}" 
            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-           + Add New Tip
+           + Add New
         </a>
     </div>
 
@@ -23,6 +23,7 @@
                     <th class="px-6 py-3 text-left">Title</th>
                     <th class="px-6 py-3 text-left">Content</th>
                     <th class="px-6 py-3 text-left">Author</th>
+                    <th class="px-6 py-3 text-left">Link</th>
                     <th class="px-6 py-3 text-left">Actions</th>
                 </tr>
             </thead>
@@ -33,8 +34,16 @@
                         <td class="px-6 py-3">{{ Str::limit($tip->content, 50) }}</td>
                         <td class="px-6 py-3">{{ $tip->user->name }}</td>
                         <td class="px-6 py-3">
-                            <a href="{{ route('admin.tips.edit', $tip->id) }}" 
-                               class="text-blue-600 hover:underline">Edit</a>
+                            @if($tip->link)
+                                <a href="{{ $tip->link }}" target="_blank" class="text-blue-600 hover:underline">
+                                    Visit Link
+                                </a>
+                            @else
+                                <span class="text-gray-400 italic">No link</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-3">
+                            <a href="{{ route('admin.tips.edit', $tip->id) }}" class="text-blue-600 hover:underline">Edit</a>
                             <form action="{{ route('admin.tips.destroy', $tip->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
@@ -44,7 +53,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-3 text-center text-gray-500">No tips found.</td>
+                        <td colspan="5" class="px-6 py-3 text-center text-gray-500">No tips found.</td>
                     </tr>
                 @endforelse
             </tbody>

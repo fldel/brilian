@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title'); // Judul tip
             $table->text('content'); // Konten tip
+            $table->string('image')->nullable(); // Menyimpan path gambar tip
+            $table->string('link')->nullable(); // Menyimpan link terkait tip
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relasi ke tabel users
             $table->timestamps();
         });

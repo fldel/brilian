@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/about', fn() => view('about'))->name('about');
 Route::get('/bookmark', fn() => view('bookmarks'))->name('bookmark');
-Route::get('/tips', fn() => view('tips'))->name('tips');
+Route::get('/tips', [TipController::class, 'publicTips'])->name('tips');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
