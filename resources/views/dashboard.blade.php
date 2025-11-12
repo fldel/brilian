@@ -116,6 +116,7 @@
             </div>
         </div>
     </div>
+
 <!-- ================= POPUP DETAIL ================= -->
 <div 
     x-show="selectedScholarship" 
@@ -133,7 +134,7 @@
         x-transition:leave-end="scale-90 opacity-0"
         class="bg-white rounded-3xl w-full max-w-6xl p-10 shadow-2xl relative overflow-hidden">
 
-        <!-- Close button (sedikit ke kiri) -->
+        <!-- Close button -->
         <button 
             @click="selectedScholarship = null" 
             class="absolute top-5 right-12 text-gray-500 hover:text-gray-800 text-3xl font-bold">
@@ -143,44 +144,65 @@
         <!-- CONTENT -->
         <template x-if="selectedScholarship">
             <div class="flex flex-col md:flex-row gap-10 mt-6">
-
-                <!-- LEFT SECTION -->
+                <!-- LEFT -->
                 <div class="flex-1">
                     <div class="flex items-start justify-between mb-4">
-                        <h2 class="text-4xl font-black text-gray-900" 
-                            x-text="selectedScholarship.name"></h2>
+                        <h2 class="text-4xl font-black text-gray-900" x-text="selectedScholarship.name"></h2>
 
-                        <!-- Bookmark Button -->
                         <button 
-                            class="ml-4 border-2 border-gray-300 hover:border-blue-500 text-gray-500 hover:text-blue-600 
-                                rounded-full w-14 h-14 flex items-center justify-center transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" 
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                            </svg>
+                            x-data="{ bookmarked: false }"
+                            x-init="
+                                fetch(`/bookmark/${selectedScholarship.id}/toggle`, {
+                                    method: 'POST',
+                                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+                                    body: JSON.stringify({ check: true })
+                                }).then(r => r.json()).then(res => bookmarked = res.status === 'exists');
+                            "
+                            @click="
+                                fetch(`/bookmark/${selectedScholarship.id}/toggle`, {
+                                    method: 'POST',
+                                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                                }).then(r => r.json()).then(res => bookmarked = res.status === 'added');
+                            "
+                            class="p-3 rounded-xl transition bg-gray-100 hover:bg-gray-200 flex items-center justify-center group"
+                            :class="bookmarked ? 'bg-yellow-400 text-white hover:bg-yellow-500' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                        >
+                            <!-- Ikon Bookmark -->
+                            <template x-if="!bookmarked">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                                    stroke-width="2" stroke="currentColor" class="w-7 h-7 transition-transform group-hover:scale-110">
+                                    <path stroke-linecap="round" stroke-linejoin="round" 
+                                        d="M5 5v14l7-4 7 4V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" />
+                                </svg>
+                            </template>
+
+                            <!-- Ikon Saved -->
+                            <template x-if="bookmarked">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" 
+                                    class="w-7 h-7 transition-transform group-hover:scale-110">
+                                    <path d="M5 3a2 2 0 0 0-2 2v16l9-5 9 5V5a2 2 0 0 0-2-2H5z" />
+                                </svg>
+                            </template>
                         </button>
+
                     </div>
 
                     <h3 class="text-xl font-bold mb-2">Description</h3>
-                    <p class="text-gray-700 leading-relaxed mb-6" 
-                        x-text="selectedScholarship.description"></p>
+                    <p class="text-gray-700 leading-relaxed mb-6" x-text="selectedScholarship.description"></p>
 
                     <div class="flex gap-10 text-gray-900">
                         <div>
                             <p class="font-bold text-lg">Start At</p>
-                            <p class="text-gray-700 text-base mt-1" 
-                                x-text="selectedScholarship.start_date ?? 'DD/MM/YYYY'"></p>
+                            <p class="text-gray-700 text-base mt-1" x-text="selectedScholarship.start_date ?? 'DD/MM/YYYY'"></p>
                         </div>
                         <div>
                             <p class="font-bold text-lg">End At</p>
-                            <p class="text-gray-700 text-base mt-1" 
-                                x-text="selectedScholarship.end_date ?? 'DD/MM/YYYY'"></p>
+                            <p class="text-gray-700 text-base mt-1" x-text="selectedScholarship.end_date ?? 'DD/MM/YYYY'"></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT SECTION -->
+                <!-- RIGHT -->
                 <div class="flex flex-col items-center md:w-[45%]">
                     <img 
                         :src="'/storage/' + selectedScholarship.image" 
@@ -198,6 +220,7 @@
         </template>
     </div>
 </div> 
-    @include('layouts.footer')
+
+@include('layouts.footer')
 </div>
 </x-app-layout>
