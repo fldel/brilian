@@ -68,7 +68,6 @@
 
         {{-- Admin Profile --}}
         <div class="p-6 flex flex-col items-center text-center mb-2">
-            <div class="w-14 h-14 bg-gray-300 rounded-full mb-2"></div>
             <p class="font-cave text-2xl">{{ Auth::user()->name }}</p>
             <p class="font-cave text-lg text-gray-500">{{ Auth::user()->email }}</p>
 
