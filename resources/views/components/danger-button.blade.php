@@ -1,3 +1,23 @@
-<button {{ $attributes->merge(['type' => 'submit', 'class' => 'inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150']) }}>
+<button 
+    {{ $attributes->merge(['type' => 'submit', 'class' => 'pixel-button relative rounded-md transition-all duration-200']) }}
+    style="
+        --btn-main: #FF6B6B;      /* warna merah utama */
+        --btn-hover: #FF5252;     /* warna saat hover */
+        --btn-shadow: #B80000;    /* bayangan bawah */
+        --btn-border: #4A0000;    /* warna border */
+        background-color: var(--btn-main);
+        border: 3px solid var(--btn-border);
+        box-shadow: 0 6px 0 var(--btn-shadow);
+        color: #fff;
+        padding: 10px 22px;
+        position: relative;
+        top: 0;
+        font-weight: normal;
+    "
+    onmouseover="this.style.backgroundColor='var(--btn-hover)'"
+    onmouseout="this.style.backgroundColor='var(--btn-main)'"
+    onmousedown="this.style.top='3px'; this.style.boxShadow='0 3px 0 var(--btn-shadow)'"
+    onmouseup="this.style.top='0'; this.style.boxShadow='0 6px 0 var(--btn-shadow)'"
+>
     {{ $slot }}
 </button>
