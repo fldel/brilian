@@ -3,7 +3,7 @@
 @section('content')
 <div class="p-6">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Scholarships List</h1>
+        <h1 class="text-5xl font-cave text-gray-800">Scholarships List</h1>
         <a href="{{ route('admin.scholarships.create') }}" 
            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
            + Add New

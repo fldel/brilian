@@ -152,9 +152,31 @@ class ScholarshipController extends Controller
     /**
      * Display the scholarship dashboard.
      */
-    public function dashboard()
-    {
-        $scholarships = Scholarship::inRandomOrder()->take(15)->get();
-        return view('dashboard', compact('scholarships'));
+/**
+ * Display the scholarship dashboard for users (with search).
+ */
+public function dashboard(Request $request)
+{
+    $query = Scholarship::query();
+
+    // Search text
+    if ($request->filled('search')) {
+        $search = strtolower($request->search);
+
+        $query->where(function ($q) use ($search) {
+            $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+              ->orWhereRaw('LOWER(description) LIKE ?', ["%{$search}%"])
+              ->orWhereRaw('LOWER(category) LIKE ?', ["%{$search}%"]);
+        });
     }
+
+    // Recommended random (15)
+    $recommended = Scholarship::inRandomOrder()->take(15)->get();
+
+    // Main list (filtered)
+    $scholarships = $query->get();
+
+    return view('dashboard', compact('recommended', 'scholarships'));
+}
+
 }

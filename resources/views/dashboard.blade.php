@@ -17,21 +17,20 @@
 
         <!-- Search bar -->
         <div class="z-10 flex justify-center w-full px-4 mt-24">
-            <div class="flex flex-col w-full max-w-6xl gap-3 font-cave sm:flex-row sm:gap-4">
-                <input type="text" placeholder="Search something.." 
+            <form method="GET" action="{{ route('dashboard') }}" 
+                class="flex flex-col w-full max-w-6xl gap-3 font-cave sm:flex-row sm:gap-4">
+
+                <input 
+                    type="text" 
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search something.."
                     class="flex-1 min-w-0 h-[54px] px-4 sm:px-6 text-gray-800 rounded-full 
-                           bg-white/80 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-black text-[30px]" />
+                        bg-white/80 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-black text-[30px]" />
 
-                <select class="w-full sm:w-[160px] md:w-[200px] lg:w-[240px] xl:w-[280px] h-[54px] px-4 
-                               text-gray-800 rounded-full bg-white/80 backdrop-blur-md 
-                               focus:outline-none focus:ring-2 focus:ring-black text-[30px]">
-                    <option>Category</option>
-                    <option>Tips</option>
-                    <option>Bookmark</option>
-                </select>
-
-                <button class="border-brand-dark border-2 h-[50px] w-full sm:w-[54px] flex items-center justify-center text-white 
-                               transition bg-blue-600 rounded-full hover:bg-blue-700">
+                <button 
+                    class="border-brand-dark border-2 h-[50px] w-full sm:w-[54px] flex items-center justify-center 
+                        text-white transition bg-blue-600 rounded-full hover:bg-blue-700">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
                         fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                         <path
@@ -40,7 +39,7 @@
                             6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                     </svg>
                 </button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -53,7 +52,7 @@
 
         <div class="scroll-container relative overflow-hidden">
             <div class="scroll-wrapper flex gap-6">
-                @foreach($scholarships as $scholarship)
+                @foreach($recommended as $scholarship)
                     <div 
                         class="relative flex-shrink-0 w-[450px] h-[300px] rounded-2xl overflow-hidden border-4 border-white/40 
                             transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl cursor-pointer"
@@ -116,110 +115,6 @@
             </div>
         </div>
     </div>
-
-<!-- ================= POPUP DETAIL ================= -->
-<div 
-    x-show="selectedScholarship" 
-    x-transition.opacity
-    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-    x-cloak
-    @click.self="selectedScholarship = null">
-
-    <div 
-        x-transition:enter="transition transform duration-300"
-        x-transition:enter-start="scale-90 opacity-0"
-        x-transition:enter-end="scale-100 opacity-100"
-        x-transition:leave="transition transform duration-300"
-        x-transition:leave-start="scale-100 opacity-100"
-        x-transition:leave-end="scale-90 opacity-0"
-        class="bg-white rounded-3xl w-full max-w-6xl p-10 shadow-2xl relative overflow-hidden">
-
-        <!-- Close button -->
-        <button 
-            @click="selectedScholarship = null" 
-            class="absolute top-5 right-12 text-gray-500 hover:text-gray-800 text-3xl font-bold">
-            ✕
-        </button>
-
-        <!-- CONTENT -->
-        <template x-if="selectedScholarship">
-            <div class="flex flex-col md:flex-row gap-10 mt-6">
-                <!-- LEFT -->
-                <div class="flex-1">
-                    <div class="flex items-start justify-between mb-4">
-                        <h2 class="text-4xl font-black text-gray-900" x-text="selectedScholarship.name"></h2>
-
-                        <button 
-                            x-data="{ bookmarked: false }"
-                            x-init="
-                                fetch(`/bookmark/${selectedScholarship.id}/toggle`, {
-                                    method: 'POST',
-                                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
-                                    body: JSON.stringify({ check: true })
-                                }).then(r => r.json()).then(res => bookmarked = res.status === 'exists');
-                            "
-                            @click="
-                                fetch(`/bookmark/${selectedScholarship.id}/toggle`, {
-                                    method: 'POST',
-                                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
-                                }).then(r => r.json()).then(res => bookmarked = res.status === 'added');
-                            "
-                            class="p-3 rounded-xl transition bg-gray-100 hover:bg-gray-200 flex items-center justify-center group"
-                            :class="bookmarked ? 'bg-yellow-400 text-white hover:bg-yellow-500' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-                        >
-                            <!-- Ikon Bookmark -->
-                            <template x-if="!bookmarked">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                                    stroke-width="2" stroke="currentColor" class="w-7 h-7 transition-transform group-hover:scale-110">
-                                    <path stroke-linecap="round" stroke-linejoin="round" 
-                                        d="M5 5v14l7-4 7 4V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" />
-                                </svg>
-                            </template>
-
-                            <!-- Ikon Saved -->
-                            <template x-if="bookmarked">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" 
-                                    class="w-7 h-7 transition-transform group-hover:scale-110">
-                                    <path d="M5 3a2 2 0 0 0-2 2v16l9-5 9 5V5a2 2 0 0 0-2-2H5z" />
-                                </svg>
-                            </template>
-                        </button>
-
-                    </div>
-
-                    <h3 class="text-xl font-bold mb-2">Description</h3>
-                    <p class="text-gray-700 leading-relaxed mb-6" x-text="selectedScholarship.description"></p>
-
-                    <div class="flex gap-10 text-gray-900">
-                        <div>
-                            <p class="font-bold text-lg">Start At</p>
-                            <p class="text-gray-700 text-base mt-1" x-text="selectedScholarship.start_date ?? 'DD/MM/YYYY'"></p>
-                        </div>
-                        <div>
-                            <p class="font-bold text-lg">End At</p>
-                            <p class="text-gray-700 text-base mt-1" x-text="selectedScholarship.end_date ?? 'DD/MM/YYYY'"></p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT -->
-                <div class="flex flex-col items-center md:w-[45%]">
-                    <img 
-                        :src="'/storage/' + selectedScholarship.image" 
-                        class="w-full h-[550px] object-cover rounded-2xl border-2 border-blue-200 mb-6">
-
-                    <x-pixel-button 
-                        maincolor="#B8860B" 
-                        shadowcolor="#B8860B" 
-                        class="text-white w-full"
-                        @click="window.open(selectedScholarship.link, '_blank')">
-                        Apply Now!
-                    </x-pixel-button>
-                </div>
-            </div>
-        </template>
-    </div>
-</div> 
 
 @include('layouts.footer')
 </div>

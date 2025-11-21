@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Brilian') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -24,7 +25,6 @@
                 </p>
             </div>
 
-            {{-- Stats --}}
             <div class="flex bg-gray-50 rounded-lg border border-gray-200">
                 <div class="px-6 py-2 text-center border-r border-gray-200">
                     <p class="text-3xl font-bold">{{ $userCount }}</p>
@@ -37,7 +37,6 @@
             </div>
         </div>
 
-        {{-- Table --}}
         <div class="w-full border-t border-gray-200">
             <div class="grid grid-cols-6 text-sm text-gray-500 font-semibold py-3 border-b border-gray-200">
                 <span>Name</span>
@@ -77,40 +76,69 @@
         </div>
     </section>
 
-    {{-- Bottom row --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {{-- User Activity --}}
-        <section class="bg-white shadow p-6 border-[3px] border-[#D8E0E4] rounded-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-cave text-4xl">User Activity</h3>
-                <select class="border border-gray-300 text-sm rounded-md px-2 py-1 text-gray-600 focus:outline-none">
-                    <option>01–07 May</option>
-                    <option>08–14 May</option>
-                    <option>15–21 May</option>
-                </select>
+    {{-- ANALYTICS SECTION --}}
+    <section class="bg-white shadow p-6 border-[3px] border-[#D8E0E4] rounded-2xl">
+        <h2 class="font-cave text-4xl mb-6">Analytics Overview</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="bg-gray-50 border rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3">User Growth</h3>
+                <canvas id="userGrowthChart"></canvas>
             </div>
 
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-sky-500"></span>
-                    <span class="text-sm text-gray-600">Applying</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-purple-600"></span>
-                    <span class="text-sm text-gray-600">Wandering</span>
-                </div>
+            <div class="bg-gray-50 border rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3">Scholarship Status</h3>
+                <canvas id="scholarshipStatusChart"></canvas>
             </div>
 
-            <p class="text-sm text-gray-500">No user activity right now</p>
-        </section>
+            <div class="bg-gray-50 border rounded-xl p-4">
+                <h3 class="font-semibold text-lg mb-3">Category Distribution</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
 
-        {{-- Update in progress --}}
-        <section class="bg-slate-900 text-white shadow p-6 rounded-2xl">
-            <h3 class="font-cave text-4xl mb-4">Update in progress:</h3>
-            <p class="text-gray-400">No update right now</p>
-        </section>
-    </div>
+        </div>
+    </section>
+
 </div>
+
+<script>
+    new Chart(document.getElementById('userGrowthChart'), {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($usersPerMonth->keys()) !!},
+            datasets: [{
+                label: 'Users',
+                data: {!! json_encode($usersPerMonth->values()) !!},
+                borderWidth: 3,
+                tension: 0.4
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('scholarshipStatusChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Open', 'Closed'],
+            datasets: [{
+                data: [{{ $openCount }}, {{ $closedCount }}]
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($categoryData->keys()) !!},
+            datasets: [{
+                label: 'Scholarships',
+                data: {!! json_encode($categoryData->values()) !!},
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+
 @endsection
 </body>
 </html>

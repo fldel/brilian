@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="p-6">
-    <h1 class="text-2xl font-bold mb-6">Edit User</h1>
+    <h1 class="text-5xl font-cave mb-6">Edit User</h1>
 
     @if ($errors->any())
         <div class="mb-4 bg-red-100 text-red-700 p-3 rounded-md">

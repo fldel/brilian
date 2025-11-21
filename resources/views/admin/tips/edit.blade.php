@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="p-6">
-    <h1 class="text-2xl font-bold mb-6 text-gray-800">Edit Tip</h1>
+    <h1 class="text-5xl font-cave mb-6 text-gray-800">Edit Tip</h1>
 
     <form action="{{ route('admin.tips.update', $tip->id) }}" 
           method="POST" 

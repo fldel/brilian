@@ -13,7 +13,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Create Scholarship</h1>
+    <h1 class="text-5xl font-cave mb-6">Create Scholarship</h1>
     <form action="{{ route('admin.scholarships.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @csrf
 

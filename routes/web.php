@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\TipController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\BookmarkController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -27,18 +26,9 @@ Route::get('/about', fn() => view('about'))->name('about');
 Route::get('/tips', [TipController::class, 'publicTips'])->name('tips');
 
 // =================== DASHBOARD USER ===================
-Route::get('/dashboard', function () {
-    $user = Auth::user();
-
-    // Jika admin → arahkan ke dashboard admin
-    if ($user && $user->role === 'admin') {
-        return redirect('/admin/dashboard');
-    }
-
-    // Ambil data beasiswa acak untuk user biasa
-    $scholarships = Scholarship::inRandomOrder()->take(15)->get();
-    return view('dashboard', compact('scholarships'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [ScholarshipController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // =================== PROFIL ===================
 Route::middleware('auth')->group(function () {
@@ -47,30 +37,55 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// =================== BOOKMARK (FITUR BARU) ===================
+// =================== BOOKMARK ===================
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/bookmark', [BookmarkController::class, 'index'])->name('bookmark.index');
     Route::post('/bookmark/{scholarshipId}/toggle', [BookmarkController::class, 'toggle'])->name('bookmark.toggle');
 });
 
-
 // =================== ADMIN ROUTES ===================
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
-    // Dashboard admin
+
     Route::get('/admin/dashboard', function () {
+
+        // Basic Stats
         $scholarshipCount = Scholarship::count();
         $userCount = User::count();
         $latestScholarships = Scholarship::latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('scholarshipCount', 'userCount', 'latestScholarships'));
+        // ================= ANALYTICS DATA =================
+
+        // 1. User Growth (Users per month)
+        $usersPerMonth = User::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        // 2. Scholarship Status (Open / Closed)
+        $openCount = Scholarship::where('is_available', 1)->count();
+        $closedCount = Scholarship::where('is_available', 0)->count();
+
+        // 3. Category Distribution
+        $categoryData = Scholarship::selectRaw('category, COUNT(*) as total')
+            ->groupBy('category')
+            ->pluck('total', 'category');
+
+
+        return view('admin.dashboard', compact(
+            'scholarshipCount',
+            'userCount',
+            'latestScholarships',
+            'usersPerMonth',
+            'openCount',
+            'closedCount',
+            'categoryData'
+        ));
     })->name('admin.dashboard');
 
-    // Resource routes untuk kelola data admin
+    // CRUD Admin
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('scholarships', ScholarshipController::class);
         Route::resource('tips', TipController::class);
         Route::resource('users', UserController::class);
-        Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     });
 });
 

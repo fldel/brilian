@@ -13,7 +13,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Create New User</h1>
+    <h1 class="text-5xl font-cave mb-6">Create New User</h1>
     <form action="{{ route('admin.users.store') }}" method="POST" class="grid grid-cols-1 gap-6">
         @csrf
 

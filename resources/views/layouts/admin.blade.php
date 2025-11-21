@@ -7,30 +7,30 @@
 
     <title>{{ config('app.name', 'Brilian') }}</title>
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
+
 <body class="bg-white flex">
 
-    {{-- Sidebar --}}
-    @include('layouts.adminsidebar')
+    {{-- FIXED SIDEBAR --}}
+    <div class="fixed left-5 top-5">
+        @include('layouts.adminsidebar')
+    </div>
 
-    {{-- Main content --}}
-    <div class="flex-1 flex flex-col">
-        {{-- Header --}}
+    {{-- MAIN CONTENT WITH LEFT MARGIN --}}
+    <div class="flex-1 flex flex-col ml-[340px]">
+
+        {{-- HEADER --}}
         @include('layouts.adminheader')
 
-        {{-- Content --}}
+        {{-- PAGE CONTENT --}}
         <main class="p-6">
             @yield('content')
         </main>
     </div>
 
 
-    {{-- ========================= --}}
-    {{--       TOAST SUCCESS       --}}
-    {{-- ========================= --}}
+    {{-- SUCCESS TOAST --}}
     @if(session('success'))
         <div id="toast-success"
              class="fixed top-4 right-4 z-50 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg opacity-0 translate-x-5 transition-all duration-500">
@@ -38,9 +38,7 @@
         </div>
     @endif
 
-    {{-- ========================= --}}
-    {{--        TOAST ERROR        --}}
-    {{-- ========================= --}}
+    {{-- ERROR TOAST --}}
     @if($errors->any())
         <div id="toast-error"
              class="fixed top-4 right-4 z-50 bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg opacity-0 translate-x-5 transition-all duration-500">
@@ -49,13 +47,9 @@
     @endif
 
 
-    {{-- ========================= --}}
-    {{--      TOAST SCRIPT JS      --}}
-    {{-- ========================= --}}
+    {{-- TOAST SCRIPT --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-
-            // SUCCESS TOAST
             const toastSuccess = document.getElementById("toast-success");
             if (toastSuccess) {
                 setTimeout(() => toastSuccess.classList.remove("opacity-0", "translate-x-5"), 150);
@@ -63,7 +57,6 @@
                 setTimeout(() => toastSuccess.remove(), 3800);
             }
 
-            // ERROR TOAST
             const toastError = document.getElementById("toast-error");
             if (toastError) {
                 setTimeout(() => toastError.classList.remove("opacity-0", "translate-x-5"), 150);
