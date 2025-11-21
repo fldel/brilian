@@ -7,11 +7,10 @@ With a modern and responsive design, Brilian helps **students, parents, and educ
 
 ## ✨ Features
 - 📊 **Dashboard** – Overview of latest, popular, and recommended scholarships  
-- 🔍 **Search & Filter** – Search by education level, field of study, provider, country, deadline  
-- 📚 **Scholarship Catalog** – Detailed info: description, requirements, deadlines, official links  
+- 🔍 **Search** – Search your scholarship easily 
+- 📚 **Scholarship Catalog** – Detailed info: description, start & ends date, official links  
 - 📌 **Bookmarking** – Save scholarships for later access  
 - 📖 **Guides & Tips** – Practical resources (CV writing, motivation letter, recommendation letter, etc.)  
-- 📱 **Responsive Design** – Works seamlessly on desktop & mobile  
 
 ---
 
@@ -65,7 +64,7 @@ php artisan serve
 ```
 
 Link (Not Available right now)
-👉 **http://brilianproject.test**
+👉 **http://brilian.test**
 
 ---
 
