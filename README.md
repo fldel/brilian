@@ -27,8 +27,8 @@ With a modern and responsive design, Brilian helps **students, parents, and educ
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/username/brilian-scholarship-info.git
-cd brilian-scholarship-info
+git clone https://github.com/username/brilian.git
+cd brilian
 ```
 
 ### 2. Install Dependencies
@@ -80,7 +80,7 @@ Link (Not Available right now)
 ## 🏗️ Project Architecture
 
 ```
-brilian-scholarship-info/
+brilian/
 ├── app/                # Core logic (Controllers, Models, Middleware)
 │   ├── Http/Controllers
 │   ├── Models
