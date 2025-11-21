@@ -115,6 +115,100 @@
             </div>
         </div>
     </div>
+    <!-- ================= POPUP DETAIL ================= -->
+<div 
+    x-show="selectedScholarship"
+    x-transition.opacity
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[9999]"
+    x-cloak
+    @click.self="selectedScholarship = null"
+>
+
+    <div 
+        x-transition:enter="transition transform duration-300"
+        x-transition:enter-start="scale-90 opacity-0"
+        x-transition:enter-end="scale-100 opacity-100"
+        x-transition:leave="transition transform duration-300"
+        x-transition:leave-start="scale-100 opacity-100"
+        x-transition:leave-end="scale-90 opacity-0"
+        class="bg-white rounded-3xl w-full max-w-6xl p-10 shadow-2xl relative 
+               overflow-y-auto max-h-screen"
+    >
+
+        <!-- Close button -->
+        <button 
+            @click="selectedScholarship = null"
+            class="absolute top-5 right-12 text-gray-500 hover:text-gray-800 text-3xl font-bold"
+        >
+            ✕
+        </button>
+
+        <!-- CONTENT -->
+        <template x-if="selectedScholarship">
+            <div class="flex flex-col md:flex-row gap-10 mt-6">
+
+                <!-- LEFT -->
+                <div class="flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                        <h2 class="text-4xl font-black text-gray-900"
+                            x-text="selectedScholarship.name"></h2>
+
+                        <button 
+                            class="ml-4 border-2 border-gray-300 hover:border-blue-500 
+                                   text-gray-500 hover:text-blue-600 rounded-full w-14 h-14 
+                                   flex items-center justify-center transition"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                      stroke-width="2"
+                                      d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-2">Description</h3>
+                    <p class="text-gray-700 leading-relaxed mb-6"
+                       x-text="selectedScholarship.description"></p>
+
+                    <div class="flex gap-10 text-gray-900">
+                        <div>
+                            <p class="font-bold text-lg">Start At</p>
+                            <p class="text-gray-700 mt-1"
+                               x-text="selectedScholarship.start_date ?? 'DD/MM/YYYY'"></p>
+                        </div>
+
+                        <div>
+                            <p class="font-bold text-lg">End At</p>
+                            <p class="text-gray-700 mt-1"
+                               x-text="selectedScholarship.end_date ?? 'DD/MM/YYYY'"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="flex flex-col items-center md:w-[45%]">
+                    <img 
+                        :src="'/storage/' + selectedScholarship.image"
+                        class="w-full h-[550px] object-cover rounded-2xl border-2 border-blue-200 mb-6"
+                    >
+
+                    <x-pixel-button 
+                        maincolor="#B8860B" 
+                        shadowcolor="#B8860B" 
+                        class="text-white w-full"
+                        @click="window.open(selectedScholarship.link, '_blank')"
+                    >
+                        Apply Now!
+                    </x-pixel-button>
+                </div>
+
+            </div>
+        </template>
+
+    </div>
+</div>
+
 
 @include('layouts.footer')
 </div>
