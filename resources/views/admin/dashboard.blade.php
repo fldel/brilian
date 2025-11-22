@@ -38,9 +38,8 @@
         </div>
 
         <div class="w-full border-t border-gray-200">
-            <div class="grid grid-cols-6 text-sm text-gray-500 font-semibold py-3 border-b border-gray-200">
+            <div class="grid grid-cols-5 text-sm text-gray-500 font-semibold py-3 border-b border-gray-200">
                 <span>Name</span>
-                <span>Created By</span>
                 <span>Image</span>
                 <span>Status</span>
                 <span>Start Date</span>
@@ -48,9 +47,8 @@
             </div>
 
             @forelse ($latestScholarships as $scholarship)
-                <div class="grid grid-cols-6 text-sm text-gray-700 py-3 border-b border-gray-100">
+                <div class="grid grid-cols-5 text-sm text-gray-700 py-3 border-b border-gray-100">
                     <span>{{ $scholarship->name }}</span>
-                    <span>{{ $scholarship->user->name ?? 'Unknown' }}</span>
                     <span>
                         @if($scholarship->image)
                             <img src="{{ asset('storage/' . $scholarship->image) }}" alt="Scholarship Image" class="w-10 h-10 rounded-lg">

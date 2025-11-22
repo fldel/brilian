@@ -71,9 +71,16 @@ Link (Not Available right now)
 ## 📖 Usage
 1. Register/Login to access personalized features.  
 2. Browse **Dashboard** for the latest & popular scholarships.  
-3. Use **Search & Filter** to find scholarships that fit your criteria.  
+3. Use **Search** to find scholarships that fit your criteria.  
 4. Save scholarships to **Bookmarks**.  
-5. Access **Guides & Tips** for application preparation.  
+5. Access **Tips** for application preparation.  
+
+---
+
+## 👤 Admin
+For enter the admin dashboard, you can login with the email & password below:
+Email: fldelhyri@gmail.com
+Password: fideladmin123
 
 ---
 
